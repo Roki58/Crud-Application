@@ -55,5 +55,13 @@ namespace Crud_Application.Controllers
 
         }
 
+        [HttpDelete("soft-delete-user-by-id")]
+        public async Task<IActionResult> SoftDeleteByIdAsync(int id)
+        {
+            var response = await _userService.SoftDeleteByIdAsync(id);
+            return Ok(response);
+
+        }
+
     }
 }

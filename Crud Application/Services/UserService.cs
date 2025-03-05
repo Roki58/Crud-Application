@@ -51,19 +51,19 @@ namespace Crud_Application.Services
             return response;
         }
 
-
-
-
-
-
-
         public async Task<ResponseDto> DeleteUserByIdAsync(int id)
         {
             var response = await _userRepo.DeleteUserByIdAsync(id);
             return response;
 
         }
+        public async Task<ResponseDto> SoftDeleteByIdAsync(int id)
+        {
+            var response = await _userRepo.SoftDeleteByIdAsync(id);
+            return response;
+        }
 
-        
+
+
     }
 }

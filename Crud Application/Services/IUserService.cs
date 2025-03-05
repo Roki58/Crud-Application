@@ -11,5 +11,6 @@ namespace Crud_Application.Services
         Task GetUserByIdAsync(User user);
         Task<ResponseDto> UpdatedUserAsync(User user);
         Task<ResponseDto> DeleteUserByIdAsync(int id);
+        Task<ResponseDto> SoftDeleteByIdAsync(int id);
     }
 }

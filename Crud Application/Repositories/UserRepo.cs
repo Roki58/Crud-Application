@@ -31,7 +31,7 @@ namespace Crud_Application.Repositories
         public async Task<ResponseDto> GetAllUsersAsync()
         {
             SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection").ToString());
-            SqlDataAdapter da = new SqlDataAdapter("Select * From DemoUser", connection);
+            SqlDataAdapter da = new SqlDataAdapter("Select * From DemoUser where IsActive = 1", connection);
             DataTable dt = new DataTable();
             da.Fill(dt);
             List<User> users = new List<User>();
@@ -123,9 +123,6 @@ namespace Crud_Application.Repositories
             }
             return response;
         }
-
-
-
         public async Task<ResponseDto> DeleteUserByIdAsync(int id)
         {
             string query = "DELETE FROM DemoUser WHERE ID = @Id";
@@ -157,6 +154,31 @@ namespace Crud_Application.Repositories
             }
         }
 
+        public async Task<ResponseDto> SoftDeleteByIdAsync(int id)
+        {
+            ResponseDto response = new ResponseDto();
+
+            using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection")))
+            {
+                string query = @"Update DemoUser set IsActive = 0 Where Id = @Id";
+                connection.Open();
+                int roweffected= await connection.ExecuteAsync(query, new { Id =id });
+                connection.Close();
+                if(roweffected > 0)
+                {
+                    response.Msg = "Succesfully deleted";
+                    response.StatusCode = "200";
+                }
+                else
+                {
+                    response.Msg = "user not deleted";
+                    response.StatusCode = "500";
+                }
+
+            }
+
+            return response;
+        }
        
     }
 }

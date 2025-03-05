@@ -9,5 +9,6 @@ namespace Crud_Application.Repositories
         Task<ResponseDto> GetUserByIdAsync(int id);
         Task<ResponseDto> UpdatedUserAsync(User user);
         Task<ResponseDto> DeleteUserByIdAsync(int id);
+        Task<ResponseDto> SoftDeleteByIdAsync(int id);
     }
 }
