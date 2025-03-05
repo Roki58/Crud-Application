@@ -40,6 +40,20 @@ namespace Crud_Application.Controllers
             return Ok(response);
 
         }
+        [HttpPut("update-user")]
+        public async Task<IActionResult> UpdatedUserAsync(User user)
+        {
+            var response = await _userService.UpdatedUserAsync(user);
+            return Ok(response);
+
+        }
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUserByIdAsync(int id)
+        {
+            var response = await _userService.DeleteUserByIdAsync(id);
+            return Ok(response);
+
+        }
 
     }
 }

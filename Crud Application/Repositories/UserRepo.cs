@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using Azure;
 using Crud_Application.Models;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 
 namespace Crud_Application.Repositories
@@ -9,6 +10,10 @@ namespace Crud_Application.Repositories
     public class UserRepo : IUserRepo
     {
         private readonly IConfiguration _configuration;
+        private object cmd;
+
+        public SqlCommand SqlCommand { get; private set; }
+
         public UserRepo(IConfiguration configuration)
         {
             _configuration = configuration; 
@@ -91,6 +96,67 @@ namespace Crud_Application.Repositories
             return response;
 
         }
-        
+        public async Task<ResponseDto> UpdatedUserAsync(User user)
+        {
+            ResponseDto response = new ResponseDto();
+            using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection").ToString()))
+            {
+                string query = "UPDATE DemoUser SET Name=@Name, Email=@Email WHERE Id=@Id";
+                connection.Open();
+                int roweffected = await connection.ExecuteAsync(query, new { Name = user.Name, Email = user.Email, Id = user.Id });
+                connection.Close();
+                if (roweffected > 0)
+                {
+                    response.Msg = "Succesfully Upadated";
+                    response.StatusCode = "200";
+                    response.Data= user;
+                }
+                else
+                {
+
+                    response.Msg = "Succesfully not Upadated";
+                    response.StatusCode = "500";
+                   
+
+                }
+                
+            }
+            return response;
+        }
+
+
+
+        public async Task<ResponseDto> DeleteUserByIdAsync(int id)
+        {
+            string query = "DELETE FROM DemoUser WHERE ID = @Id";
+
+            using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("CrudConnection")))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                   
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    await connection.OpenAsync();
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync(); 
+                    ResponseDto response = new ResponseDto();
+
+                    if (rowsAffected > 0)
+                    {
+                        response.StatusCode = "200";
+                        response.Msg = "User successfully deleted";
+                    }
+                    else
+                    {
+                        response.StatusCode = "500";
+                        response.Msg = "User not deleted";
+                    }
+
+                    return response;
+                }
+            }
+        }
+
+       
     }
 }

@@ -41,5 +41,29 @@ namespace Crud_Application.Services
 
         }
 
+        public Task GetUserByIdAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<ResponseDto> UpdatedUserAsync(User user)
+        {
+            var response = await _userRepo.UpdatedUserAsync(user);
+            return response;
+        }
+
+
+
+
+
+
+
+        public async Task<ResponseDto> DeleteUserByIdAsync(int id)
+        {
+            var response = await _userRepo.DeleteUserByIdAsync(id);
+            return response;
+
+        }
+
+        
     }
 }

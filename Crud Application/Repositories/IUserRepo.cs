@@ -7,5 +7,7 @@ namespace Crud_Application.Repositories
         Task<int> CreateUserAsync(User user);
         Task<ResponseDto> GetAllUsersAsync();
         Task<ResponseDto> GetUserByIdAsync(int id);
+        Task<ResponseDto> UpdatedUserAsync(User user);
+        Task<ResponseDto> DeleteUserByIdAsync(int id);
     }
 }
